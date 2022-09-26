@@ -1,0 +1,36 @@
+version: '3.1'
+
+services:
+
+  wordpress:
+    image: wordpress
+    restart: always
+    ports:
+      - 8000:80
+    env_file:
+      - ./.envs/.wordpress
+    volumes:
+      - wordpress:/var/www/html
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    logging:
+        driver : 'json-file'
+        options : 
+                max-size : "100m"
+                max-file : "3"
+
+  db:
+    image: mysql:5.7.30
+    restart: always
+    env_file:
+      - ./.envs/.mysql
+    volumes:
+      - db:/var/lib/mysql
+    logging : 
+        driver : 'json-file'
+        options : 
+                max-size : "100m"
+                max-file : "3"
+
+volumes:
+  wordpress:
+  db:
